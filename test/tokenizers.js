@@ -1,7 +1,7 @@
 const {RegexTokenizer, TokenizerChain, CustomTokenizer} = require("../dist");
 const {expect} = require('chai');
 
-describe("#RegenTokenizer", () => {
+describe("RegenTokenizer", () => {
     context("with HTML test", () => {
         it("should return the correct tokens.", () => {
             expect(new RegexTokenizer(/<.*?>/).tokenize("message<p>test</p>another message")).to.eql([
@@ -15,7 +15,7 @@ describe("#RegenTokenizer", () => {
     });
 });
 
-describe("#TokenizerChain", () => {
+describe("TokenizerChain", () => {
     context("with HTML test", () => {
         it("should return the correct tokens", () => {
             expect(new TokenizerChain(new RegexTokenizer(/<.*?>/))
