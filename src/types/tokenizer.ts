@@ -13,9 +13,9 @@ export interface Token {
      */
     isToken: boolean;
     /**
-     * Custom info that a tokenizer can add to the token.
+     * Custom data that a tokenizer can add to the token.
      */
-    info?: any;
+    data?: any;
 }
 
 /**

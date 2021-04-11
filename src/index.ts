@@ -4,3 +4,5 @@ export {Token, Tokenizer, TokenCallback, TokenizerChainAddCallback} from "./type
 
 export {RegexTokenizer} from "./tokenizers/RegexTokenizer";
 export {CustomTokenizer, CustomTokenizerCallback} from "./tokenizers/CustomTokenizer";
+
+export {ParseExpression} from "./parsers/ExpressionParser";

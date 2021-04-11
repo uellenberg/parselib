@@ -1,5 +1,7 @@
-const {RegexTokenizer, TokenizerChain, CustomTokenizer} = require("../dist");
-const {expect} = require('chai');
+const {RegexTokenizer, TokenizerChain, CustomTokenizer, ParseExpression} = require("../dist");
+const {expect} = require("chai");
+
+ParseExpression("1+1(20)*(1+(17/2))");
 
 describe("RegenTokenizer", () => {
     context("with HTML test", () => {
@@ -30,11 +32,11 @@ describe("TokenizerChain", () => {
                 })
                 .run("message<p>test</p>another message")).to.eql(
                 [
-                    { value: 'message', isToken: false },
-                    { value: 'p', isToken: true, info: 'opening' },
-                    { value: 'test', isToken: false },
-                    { value: 'p', isToken: true, info: 'closing' },
-                    { value: 'another message', isToken: false }
+                    { value: "message", isToken: false },
+                    { value: "p", isToken: true, info: "opening" },
+                    { value: "test", isToken: false },
+                    { value: "p", isToken: true, info: "closing" },
+                    { value: "another message", isToken: false }
                 ]
             );
         });
