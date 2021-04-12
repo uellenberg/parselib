@@ -8,3 +8,4 @@ export {CustomTokenizer, CustomTokenizerCallback} from "./tokenizers/CustomToken
 export {RecursiveMap} from "./tools/recursiveMap";
 
 export {ParseExpression} from "./parsers/ExpressionParser";
+export {ParseXML} from "./parsers/XMLParser";

@@ -15,7 +15,7 @@ export const ParseExpression = (input: string) : number => {
     //Next, we will tokenize our input using the parentheses tokenizer. From this, we can continuously solve the deepest nested parentheses using recursion.
     const parentheses = parenthesesTokenizerChain.run(input);
 
-    return parseFloat(RecursiveMap<string>(parentheses, (token) => token.value === "(", (token) => token.value === ")", (token) => {
+    return parseFloat(RecursiveMap<string>(parentheses, (token) => token.isToken && token.value === "(", (token) => token.isToken && token.value === ")", (token) => {
         return token.value;
     }, null, (tokens: string[]) => {
         return [solve(tokens.join(""))];

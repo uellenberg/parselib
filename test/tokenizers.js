@@ -1,10 +1,10 @@
-const {RegexTokenizer, TokenizerChain, CustomTokenizer, ParseExpression} = require("../dist");
+const {RegexTokenizer, TokenizerChain, CustomTokenizer, ParseExpression, ParseXML} = require("../dist");
 const {expect} = require("chai");
 
 describe("TokenizerChain", () => {
     context("with HTML test", () => {
         it("should return the correct tokens", () => {
-            expect(new TokenizerChain(new RegexTokenizer(/<.*?>/g))
+            expect(new TokenizerChain(new RegexTokenizer(/<(".*?"|.*?)*?>/g))
                 .token(new CustomTokenizer(input => {
                     return [
                         {value: input.substring(1, input.length-1), isToken: true}
@@ -61,7 +61,7 @@ describe("Tokenizers", () => {
     describe("RegexTokenizer", () => {
         context("with a valid input", () => {
             it("should return the correct tokens.", () => {
-                expect(new RegexTokenizer(/<.*?>/g).tokenize("message<p>test</p>another message")).to.eql([
+                expect(new RegexTokenizer(/<(".*?"|.*?)*?>/g).tokenize("message<p>test</p>another message")).to.eql([
                     {value: "message", isToken: false},
                     {value: "<p>", isToken: true},
                     {value: "test", isToken: false},

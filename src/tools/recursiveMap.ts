@@ -18,21 +18,19 @@ export const RecursiveMap = <Type>(tokens: Token[], startCheckCallback: Recursiv
 
     //We need to go through each token, and find the highest nested sequences.
     for(let i = 0; i < tokens.length; i++){
-        if(tokens[i].isToken) {
-            if(startCheckCallback(tokens[i])){
-                if(depth === 0) startPos = i;
-                depth++;
-            } else if(endCheckCallback(tokens[i])) {
-                if(startPos === -1) throw new Error("The input contains an invalid sequence.");
+        if(startCheckCallback(tokens[i])){
+            if(depth === 0) startPos = i;
+            depth++;
+        } else if(endCheckCallback(tokens[i])) {
+            if(startPos === -1) throw new Error("The input contains an invalid sequence.");
 
-                if(depth === 1) {
-                    let toPush = RecursiveMap<Type>(tokens.slice(startPos + 1, i), startCheckCallback, endCheckCallback, pushLowestLevelCallback, pushOtherCallback, returnCallback);
+            if(depth === 1) {
+                let toPush = RecursiveMap<Type>(tokens.slice(startPos + 1, i), startCheckCallback, endCheckCallback, pushLowestLevelCallback, pushOtherCallback, returnCallback);
 
-                    if (pushOtherCallback) out.push(pushOtherCallback(toPush));
-                    else out.push(...toPush);
-                }
-                depth--;
+                if (pushOtherCallback) out.push(pushOtherCallback(toPush, tokens[startPos], tokens[i]));
+                else out.push(...toPush);
             }
+            depth--;
         }
         else if(depth === 0) {
             out.push(pushLowestLevelCallback(tokens[i]));
@@ -60,7 +58,7 @@ export type RecursiveMapPushLowestLevelCallback = (token: Token) => any;
 /**
  * An optional function that takes an output of a previous recursion and transforms it into the specified type. The input and output should match the type used in the RecursiveMap function.
  */
-export type RecursiveMapPushOtherCallback = (tokens: any[]) => any;
+export type RecursiveMapPushOtherCallback = (tokens: any[], startToken: Token, endToken: Token) => any;
 /**
  * An optional function that can be used to specify a custom output to this function. It's output will be returned and its input is the value that would have been returned otherwise. The input and output should match the type used in the RecursiveMap function.
  */
