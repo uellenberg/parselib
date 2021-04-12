@@ -9,7 +9,10 @@ export const ParseXML = (input: string) => {
         if(token.isToken) {
             const token1 = token;
             token1.value = token1.value.substring(0, token1.value.length-1);
-            return parseXMLEntity(token1);
+
+            let entity = parseXMLEntity(token1);
+            entity.content = null;
+            return entity;
         }
 
         return token.value;

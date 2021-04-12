@@ -163,9 +163,10 @@ describe("Parsers", () => {
                     </released>
                     <company>Example Company
                     with newlines</company>
+                    <selfclosing type="tag" />
                 </movie>
                 `)).to.eql([
-                    {name: "movie", attributes: {"id": "1"}, content: [
+                    {name: "movie", attributes: {id: "1"}, content: [
                             {name: "title", attributes: {}, content: "Example Movie"},
                             {name: "released", attributes: {}, content: [
                                     {name: "year", attributes: {}, content: "1999"},
@@ -173,7 +174,8 @@ describe("Parsers", () => {
                                     {name: "day", attributes: {}, content: "18"}
                                 ]
                             },
-                            {name: "company", attributes: {}, content: "Example Company\n                    with newlines"}
+                            {name: "company", attributes: {}, content: "Example Company\n                    with newlines"},
+                            {name: "selfclosing", attributes: {type: "tag"}, content: null}
                         ]
                     }
                 ]);
