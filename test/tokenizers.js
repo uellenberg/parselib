@@ -18,14 +18,20 @@ describe("TokenizerChain", () => {
                     return [
                         {value: input.replace(/message/g, "a message used to be here"), isToken: false}
                     ];
-                }))
+                }), chain => {
+                    chain.text(new RegexTokenizer(/message/g));
+                })
                 .run("message<p>test</p>another message")).to.eql(
                 [
-                    { value: "a message used to be here", isToken: false },
-                    { value: "p", isToken: true, info: "opening" },
-                    { value: "test", isToken: false },
-                    { value: "p", isToken: true, info: "closing" },
-                    { value: "another a message used to be here", isToken: false }
+                    {value: "a ", isToken: false },
+                    {value: "message", isToken: true},
+                    {value: " used to be here", isToken: false},
+                    {value: "p", isToken: true, info: "opening"},
+                    {value: "test", isToken: false },
+                    {value: "p", isToken: true, info: "closing"},
+                    {value: "another a ", isToken: false},
+                    {value: "message", isToken: true},
+                    {value: " used to be here", isToken: false}
                 ]
             );
         });
