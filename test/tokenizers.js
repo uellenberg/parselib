@@ -1,8 +1,6 @@
 const {RegexTokenizer, TokenizerChain, CustomTokenizer, ParseExpression} = require("../dist");
 const {expect} = require("chai");
 
-ParseExpression("1+1(20)*(1+(17/2))");
-
 describe("TokenizerChain", () => {
     context("with HTML test", () => {
         it("should return the correct tokens", () => {

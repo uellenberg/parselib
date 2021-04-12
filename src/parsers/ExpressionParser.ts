@@ -63,7 +63,6 @@ type numberFunction = (a: number, b: number) => number;
 //This function takes in a simple expression, without any parentheses, and evaluates it using the noParenthesesTokenizerChain. The tokenizer chain has the added benefit of non-tokens only being operators.
 const solve = (input: string) : string => {
     let tokens: Token[] = noParenthesesTokenizerChain.run(input);
-    console.log("start", input, tokens);
 
     for (const operator of operatorKeys) {
         const opFun = operators[operator];
@@ -81,7 +80,6 @@ const solve = (input: string) : string => {
                 let b = parseFloat(tokens[i + 1].value);
 
                 tokens.splice(i - 1, 3, {value: opFun(a, b).toString(), isToken: true});
-                console.log(tokens);
                 count++;
             }
         } while(count > 0);

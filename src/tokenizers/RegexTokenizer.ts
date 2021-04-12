@@ -21,28 +21,18 @@ export class RegexTokenizer implements Tokenizer {
      * @inheritDoc
      */
     public tokenize(input: string, modify?: TokenCallback): Token[] {
-        console.log("tokenizing ", input, this.regex);
-
         let out : Token[] = [];
 
         let regResult : RegExpExecArray = null;
         let lastIndex = -1;
         let lastLength = 0;
 
-        console.log("starting", input);
-
         while((regResult = this.regex.exec(input)) !== null){
-            console.log("result", regResult);
 
             let startTextStr = input.substring(lastIndex === -1 ? 0 : lastIndex+lastLength, regResult.index);
-            console.log(startTextStr);
-            console.log(regResult[0]);
-            console.log("index: "+lastIndex, lastLength);
 
             let startText = startTextStr ? {value: startTextStr, isToken: false} : null;
             let token = {value: regResult[0], isToken: true};
-
-            //text = text.substring(startTextStr.length+regResult[0].length);
 
             if(modify){
                 if(startText) out.push(...modify(startText));
@@ -57,17 +47,12 @@ export class RegexTokenizer implements Tokenizer {
             lastLength = regResult[0].length
         }
 
-        console.log("ending", input)
-
         if(lastIndex+lastLength < input.length-1) {
-        console.log(lastIndex, input.length-1);
             let token: Token = {value: input.substring(lastIndex+lastLength), isToken: false};
 
             if(modify) out.push(...modify(token));
             else out.push(token);
         }
-
-        console.log("done", out);
 
         return out;
     }
