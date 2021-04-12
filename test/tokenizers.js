@@ -46,7 +46,7 @@ describe("Tokenizers", () => {
 describe("Parsers", () => {
     describe("ExpressionParser", () => {
         context("with ((182*(10^4))*((17*(192/4))-1))+2", () => {
-            it("should return 1493328624.5", () => {
+            it("should return 1483300002", () => {
                 expect(ParseExpression("((182*(10^4))*((17*(192/4))-1))+2")).to.eql(1483300002);
             });
         });
