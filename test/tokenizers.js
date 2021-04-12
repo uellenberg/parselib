@@ -12,15 +12,20 @@ describe("TokenizerChain", () => {
                 }), chain => {
                     chain.token(new CustomTokenizer(input => {
                         return [{value: input.startsWith("/") ? input.substring(1) : input, isToken: true, info: input.startsWith("/") ? "closing" : "opening"}];
-                    }))
+                    }));
                 })
+                .text(new CustomTokenizer(input => {
+                    return [
+                        {value: input.replace(/message/g, "a message used to be here"), isToken: false}
+                    ];
+                }))
                 .run("message<p>test</p>another message")).to.eql(
                 [
-                    { value: "message", isToken: false },
+                    { value: "a message used to be here", isToken: false },
                     { value: "p", isToken: true, info: "opening" },
                     { value: "test", isToken: false },
                     { value: "p", isToken: true, info: "closing" },
-                    { value: "another message", isToken: false }
+                    { value: "another a message used to be here", isToken: false }
                 ]
             );
         });
