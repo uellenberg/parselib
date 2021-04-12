@@ -5,7 +5,7 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "test": "mocha",
+    "test": "mocha --slow 0",
     "build": "tsc",
     "deploy": "npm publish"
   },
