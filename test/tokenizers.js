@@ -30,11 +30,30 @@ describe("TokenizerChain", () => {
             );
         });
     });
+
+    context("with no input in the constructor", () => {
+        it("should throw an error.", () => {
+            expect(() => new TokenizerChain()).to.throw("A tokenizer is required.");
+        });
+    });
+
+    context("with no input in the add functions", () => {
+        it("should throw an error.", () => {
+            expect(() => new TokenizerChain(new RegexTokenizer(/a/g)).token()).to.throw("A tokenizer is required.");
+            expect(() => new TokenizerChain(new RegexTokenizer(/a/g)).text()).to.throw("A tokenizer is required.");
+        });
+    });
+
+    context("with no input in the tokenize function", () => {
+        it("should throw an error", () => {
+            expect(() => new TokenizerChain(new RegexTokenizer(/a/g)).run()).to.throw("An input is required.");
+        });
+    });
 });
 
 describe("Tokenizers", () => {
     describe("RegexTokenizer", () => {
-        context("with HTML test", () => {
+        context("with a valid input", () => {
             it("should return the correct tokens.", () => {
                 expect(new RegexTokenizer(/<.*?>/g).tokenize("message<p>test</p>another message")).to.eql([
                     {value: "message", isToken: false},
@@ -45,14 +64,64 @@ describe("Tokenizers", () => {
                 ]);
             });
         });
+
+        context("with no input in the constructor", () => {
+            it("should throw an error.", () => {
+                expect(() => new RegexTokenizer()).to.throw("A regular expression is required.");
+            });
+        });
+
+        context("with a non-global regular expression in the constructor", () => {
+            it("should throw an error.", () => {
+                expect(() => new RegexTokenizer(/a/)).to.throw("The regular expression must have the global flag.");
+            });
+        });
+
+        context("with no input in the tokenize function", () => {
+            it("should throw an error", () => {
+                expect(() => new RegexTokenizer(/a/g).tokenize()).to.throw("An input is required.");
+            });
+        });
+    });
+
+    describe("CustomTokenizer", () => {
+        context("with a valid input", () => {
+            it("should return the correct tokens.", () => {
+                expect(new CustomTokenizer(input => input.split(" ").map(val => ({value: val, isToken: true}))).tokenize("this is a test sentence")).to.eql([
+                    {value: "this", isToken: true},
+                    {value: "is", isToken: true},
+                    {value: "a", isToken: true},
+                    {value: "test", isToken: true},
+                    {value: "sentence", isToken: true}
+                ]);
+            });
+        });
+
+        context("with no input in the constructor", () => {
+            it("should throw an error.", () => {
+                expect(() => new CustomTokenizer()).to.throw("A callback is required.");
+            });
+        });
+
+        context("with no input in the tokenize function", () => {
+            it("should throw an error", () => {
+                expect(() => new CustomTokenizer(input => input.split(" ").map(val => ({value: val, isToken: true}))).tokenize()).to.throw("An input is required.");
+            });
+        });
     });
 })
 
 describe("Parsers", () => {
     describe("ExpressionParser", () => {
-        context("with ((182*(10^4))*((17*(192/4))-1))+2", () => {
-            it("should return 1483300002", () => {
+        context("with a valid expression", () => {
+            it("should return the correct value", () => {
                 expect(ParseExpression("((182*(10^4))*((17*(192/4))-1))+2")).to.eql(1483300002);
+            });
+        });
+
+        context("with no input", () => {
+            it("should throw an error", () => {
+                expect(ParseExpression.bind(ParseExpression)).to.throw("An input is required.");
             });
         });
 

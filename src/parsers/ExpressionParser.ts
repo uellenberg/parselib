@@ -6,6 +6,8 @@ import {RegexTokenizer, Token} from "..";
  * @param input {string} - is the expression as a string.
  */
 export const ParseExpression = (input: string) : number => {
+    if(input == null) throw new Error("An input is required.");
+
     //Implicit multiplication, such as 1(2), and (2)1 need to be changed to explicit multiplication.
     input = input.replace(/(\d)\(/g, "$1*(").replace(/\)(\d)/g, ")*$1");
 
@@ -74,8 +76,6 @@ const solve = (input: string) : string => {
                 if(!tokens[i].isToken && !operatorKeys.includes(tokens[i].value)) throw new Error("The input mathematical expression contains an invalid operator.");
                 if (tokens[i].value !== operator) continue;
                 if (i === 0 || i === tokens.length - 1) throw new Error("The input mathematical expression contains an operator without a number on both sides.");
-
-                console.log("got operator", operator);
 
                 let a = parseFloat(tokens[i - 1].value);
                 let b = parseFloat(tokens[i + 1].value);

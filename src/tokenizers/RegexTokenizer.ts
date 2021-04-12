@@ -13,7 +13,9 @@ export class RegexTokenizer implements Tokenizer {
      * @param regex {RegExp} - the regular expression that will be used to find tokens. This must have the global flag.
      */
     public constructor(regex: RegExp) {
+        if(regex == null) throw new Error("A regular expression is required.");
         if(!regex.global) throw new Error("The regular expression must have the global flag.");
+
         this.regex = regex;
     }
 
@@ -21,6 +23,8 @@ export class RegexTokenizer implements Tokenizer {
      * @inheritDoc
      */
     public tokenize(input: string, modify?: TokenCallback): Token[] {
+        if(input == null) throw new Error("An input is required.");
+
         let out : Token[] = [];
 
         let regResult : RegExpExecArray = null;
@@ -41,8 +45,6 @@ export class RegexTokenizer implements Tokenizer {
                 if(startText) out.push(startText);
                 out.push(token);
             }
-
-            console.log(out);
 
             lastIndex = regResult.index;
             lastLength = regResult[0].length

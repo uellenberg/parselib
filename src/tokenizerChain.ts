@@ -13,6 +13,8 @@ export class TokenizerChain {
      * @param initialTokenizer {Tokenizer} - is the first tokenizer that will be used.
      */
     public constructor(initialTokenizer: Tokenizer) {
+        if(initialTokenizer == null) throw new Error("A tokenizer is required.");
+
         this.tokenizer = initialTokenizer;
     }
 
@@ -22,6 +24,8 @@ export class TokenizerChain {
      * @param callback {TokenizerChainAddCallback} - a function providing a new TokenizerChain that can be used to add further tokenizers to the chain.
      */
     public token(tokenizer: Tokenizer, callback?: TokenizerChainAddCallback) : TokenizerChain {
+        if(tokenizer == null) throw new Error("A tokenizer is required.");
+
         this.tokenTokenizerChain = new TokenizerChain(tokenizer);
         if(callback) callback(this.tokenTokenizerChain);
         return this;
@@ -33,6 +37,8 @@ export class TokenizerChain {
      * @param callback {TokenizerChainAddCallback} - a function providing a new TokenizerChain that can be used to add further tokenizers to the chain.
      */
     public text(tokenizer: Tokenizer, callback?: TokenizerChainAddCallback) : TokenizerChain {
+        if(tokenizer == null) throw new Error("A tokenizer is required.");
+
         this.textTokenizerChain = new TokenizerChain(tokenizer);
         if(callback) callback(this.textTokenizerChain);
         return this;
@@ -43,6 +49,8 @@ export class TokenizerChain {
      * @param input {string} - the input text that will be tokenized by the tokenizer chain.
      */
     public run(input: string) : Token[] {
+        if(input == null) throw new Error("An input is required.");
+
         return this.tokenizer.tokenize(input, token => {
             let tokens : Token[] = [token];
 

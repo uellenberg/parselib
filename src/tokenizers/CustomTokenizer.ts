@@ -11,6 +11,8 @@ export class CustomTokenizer implements Tokenizer {
      * @param callback {CustomTokenizerCallback} - the callback that will be ran on the input to the tokenizer.
      */
     public constructor(callback: CustomTokenizerCallback) {
+        if(callback == null) throw new Error("A callback is required.");
+
         this.callback = callback;
     }
 
@@ -18,6 +20,8 @@ export class CustomTokenizer implements Tokenizer {
      * @inheritDoc
      */
     tokenize(input: string, modify?: TokenCallback): Token[] {
+        if(input == null) throw new Error("An input is required.");
+
         let tokens = this.callback(input);
 
         if(!modify) return tokens;
