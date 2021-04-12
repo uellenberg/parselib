@@ -22,10 +22,12 @@ jobs:
         npm run build
     - name: Test
       run: npm run test
-      env:
-        CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
     - name: Upload
       uses: actions/upload-artifact@v2
       with:
         name: ParseLib
         path: dist/
+    - name: Codecov
+      run: npm run coverage
+      env:
+        CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
