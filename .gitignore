@@ -1,3 +1,6 @@
 .idea
 dist
 node_modules
+.nycrc
+coverage
+.nyc_output

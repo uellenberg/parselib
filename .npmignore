@@ -5,3 +5,7 @@ node_modules
 .npmignore
 package-lock.json
 tsconfig.json
+.nycrc
+coverage
+.github
+.nyc_output
