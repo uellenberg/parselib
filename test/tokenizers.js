@@ -141,10 +141,10 @@ describe("Parsers", () => {
 
         context("with invalid parentheses", () => {
             it("should throw an error.", () => {
-                expect(ParseExpression.bind(ParseExpression, "((1)")).to.throw("The input contains an invalid sequence of parentheses.");
-                expect(ParseExpression.bind(ParseExpression, ")(1)")).to.throw("The input contains an invalid sequence of parentheses.");
-                expect(ParseExpression.bind(ParseExpression, "(1)(")).to.throw("The input contains an invalid sequence of parentheses.");
-                expect(ParseExpression.bind(ParseExpression, "(1))")).to.throw("The input contains an invalid sequence of parentheses.");
+                expect(ParseExpression.bind(ParseExpression, "((1)")).to.throw("The input contains an invalid sequence.");
+                expect(ParseExpression.bind(ParseExpression, ")(1)")).to.throw("The input contains an invalid sequence.");
+                expect(ParseExpression.bind(ParseExpression, "(1)(")).to.throw("The input contains an invalid sequence.");
+                expect(ParseExpression.bind(ParseExpression, "(1))")).to.throw("The input contains an invalid sequence.");
             });
         });
     });

@@ -1,5 +1,6 @@
 import {TokenizerChain} from "../tokenizerChain";
 import {RegexTokenizer, Token} from "..";
+import {RecursiveMap} from "../tools/recursiveMap";
 
 /**
  * Parse and solve a mathematical expression.
@@ -14,39 +15,11 @@ export const ParseExpression = (input: string) : number => {
     //Next, we will tokenize our input using the parentheses tokenizer. From this, we can continuously solve the deepest nested parentheses using recursion.
     const parentheses = parenthesesTokenizerChain.run(input);
 
-    return parseFloat(recurseSolveParentheses(parentheses));
-}
-
-//The aim of this function is to find the all of the highest parentheses, then replace them with a number by recursively calling this function on all nested parenthases.
-const recurseSolveParentheses = (tokens: Token[]) : string => {
-    let depth = 0;
-    let startPos = -1;
-    let out: string = "";
-
-    //We need to go through each token, and find the highest nested parentheses.
-    for(let i = 0; i < tokens.length; i++){
-        if(tokens[i].isToken) {
-            if(tokens[i].value === "("){
-                if(depth === 0) startPos = i;
-                depth++;
-            } else {
-                if(startPos === -1) throw new Error("The input contains an invalid sequence of parentheses.");
-                if(depth === 1) out += recurseSolveParentheses(tokens.slice(startPos+1, i));
-                depth--;
-            }
-        }
-        else if(depth === 0) {
-            out += tokens[i].value;
-        }
-
-        if(depth < 0){
-            throw new Error("The input contains an invalid sequence of parentheses.");
-        }
-    }
-
-    if(depth !== 0) throw new Error("The input contains an invalid sequence of parentheses.");
-
-    return solve(out);
+    return parseFloat(RecursiveMap<string>(parentheses, (token) => token.value === "(", (token) => token.value === ")", (token) => {
+        return token.value;
+    }, null, (tokens: string[]) => {
+        return [solve(tokens.join(""))];
+    })[0]);
 }
 
 //This contains information about each operator that will be used below.
