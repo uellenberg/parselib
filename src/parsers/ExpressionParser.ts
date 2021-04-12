@@ -28,10 +28,8 @@ const recurseSolveParentheses = (tokens: Token[]) : string => {
                 if(depth === 0) startPos = i;
                 depth++;
             } else {
-                if(depth === 1) {
-                    if(startPos === -1) throw new Error("The input contains an invalid sequence of parentheses.");
-                    out += recurseSolveParentheses(tokens.slice(startPos+1, i));
-                }
+                if(startPos === -1) throw new Error("The input contains an invalid sequence of parentheses.");
+                if(depth === 1) out += recurseSolveParentheses(tokens.slice(startPos+1, i));
                 depth--;
             }
         }
@@ -73,8 +71,11 @@ const solve = (input: string) : string => {
             count = 0;
 
             for (let i = 0; i < tokens.length; i++) {
+                if(!tokens[i].isToken && !operatorKeys.includes(tokens[i].value)) throw new Error("The input mathematical expression contains an invalid operator.");
                 if (tokens[i].value !== operator) continue;
                 if (i === 0 || i === tokens.length - 1) throw new Error("The input mathematical expression contains an operator without a number on both sides.");
+
+                console.log("got operator", operator);
 
                 let a = parseFloat(tokens[i - 1].value);
                 let b = parseFloat(tokens[i + 1].value);

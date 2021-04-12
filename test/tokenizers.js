@@ -55,5 +55,22 @@ describe("Parsers", () => {
                 expect(ParseExpression("((182*(10^4))*((17*(192/4))-1))+2")).to.eql(1483300002);
             });
         });
+
+        context("with invalid operators", () => {
+            it("should throw an error.", () => {
+                expect(ParseExpression.bind(ParseExpression, "1*")).to.throw("The input mathematical expression contains an operator without a number on both sides.");
+                expect(ParseExpression.bind(ParseExpression, "*1")).to.throw("The input mathematical expression contains an operator without a number on both sides.");
+                expect(ParseExpression.bind(ParseExpression, "1**1")).to.throw("The input mathematical expression contains an invalid operator.");
+            });
+        });
+
+        context("with invalid parentheses", () => {
+            it("should throw an error.", () => {
+                expect(ParseExpression.bind(ParseExpression, "((1)")).to.throw("The input contains an invalid sequence of parentheses.");
+                expect(ParseExpression.bind(ParseExpression, ")(1)")).to.throw("The input contains an invalid sequence of parentheses.");
+                expect(ParseExpression.bind(ParseExpression, "(1)(")).to.throw("The input contains an invalid sequence of parentheses.");
+                expect(ParseExpression.bind(ParseExpression, "(1))")).to.throw("The input contains an invalid sequence of parentheses.");
+            });
+        });
     });
 });

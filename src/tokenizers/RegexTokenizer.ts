@@ -28,7 +28,6 @@ export class RegexTokenizer implements Tokenizer {
         let lastLength = 0;
 
         while((regResult = this.regex.exec(input)) !== null){
-
             let startTextStr = input.substring(lastIndex === -1 ? 0 : lastIndex+lastLength, regResult.index);
 
             let startText = startTextStr ? {value: startTextStr, isToken: false} : null;
@@ -43,11 +42,13 @@ export class RegexTokenizer implements Tokenizer {
                 out.push(token);
             }
 
+            console.log(out);
+
             lastIndex = regResult.index;
             lastLength = regResult[0].length
         }
 
-        if(lastIndex+lastLength < input.length-1) {
+        if(lastIndex+lastLength < input.length) {
             let token: Token = {value: input.substring(lastIndex+lastLength), isToken: false};
 
             if(modify) out.push(...modify(token));
