@@ -10,9 +10,10 @@ export class RegexTokenizer implements Tokenizer {
 
     /**
      * Create a new RegexTokenizer.
-     * @param regex {RegExp} - the regular expression that will be used to find tokens.
+     * @param regex {RegExp} - the regular expression that will be used to find tokens. This must have the global flag.
      */
     public constructor(regex: RegExp) {
+        if(!regex.global) throw new Error("The regular expression must have the global flag.");
         this.regex = regex;
     }
 
@@ -20,15 +21,28 @@ export class RegexTokenizer implements Tokenizer {
      * @inheritDoc
      */
     public tokenize(input: string, modify?: TokenCallback): Token[] {
-        let text = input;
-        let regResult : RegExpExecArray = null;
+        console.log("tokenizing ", input, this.regex);
+
         let out : Token[] = [];
 
-        while((regResult = this.regex.exec(text)) !== null){
-            let startText = regResult.index > 0 ? {value: text.substring(0, regResult.index), isToken: false} : null;
+        let regResult : RegExpExecArray = null;
+        let lastIndex = -1;
+        let lastLength = 0;
+
+        console.log("starting", input);
+
+        while((regResult = this.regex.exec(input)) !== null){
+            console.log("result", regResult);
+
+            let startTextStr = input.substring(lastIndex === -1 ? 0 : lastIndex+lastLength, regResult.index);
+            console.log(startTextStr);
+            console.log(regResult[0]);
+            console.log("index: "+lastIndex, lastLength);
+
+            let startText = startTextStr ? {value: startTextStr, isToken: false} : null;
             let token = {value: regResult[0], isToken: true};
 
-            text = text.substring(regResult.index+regResult[0].length, text.length);
+            //text = text.substring(startTextStr.length+regResult[0].length);
 
             if(modify){
                 if(startText) out.push(...modify(startText));
@@ -38,14 +52,22 @@ export class RegexTokenizer implements Tokenizer {
                 if(startText) out.push(startText);
                 out.push(token);
             }
+
+            lastIndex = regResult.index;
+            lastLength = regResult[0].length
         }
 
-        if(text.length > 0) {
-            let token: Token = {value: text, isToken: false};
+        console.log("ending", input)
+
+        if(lastIndex+lastLength < input.length-1) {
+        console.log(lastIndex, input.length-1);
+            let token: Token = {value: input.substring(lastIndex+lastLength), isToken: false};
 
             if(modify) out.push(...modify(token));
             else out.push(token);
         }
+
+        console.log("done", out);
 
         return out;
     }
