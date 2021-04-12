@@ -1,5 +1,6 @@
 const {RegexTokenizer, TokenizerChain, CustomTokenizer, ParseExpression, ParseXML} = require("../dist");
 const {expect} = require("chai");
+const fs = require("fs");
 
 describe("TokenizerChain", () => {
     context("with HTML test", () => {
@@ -145,6 +146,37 @@ describe("Parsers", () => {
                 expect(ParseExpression.bind(ParseExpression, ")(1)")).to.throw("The input contains an invalid sequence.");
                 expect(ParseExpression.bind(ParseExpression, "(1)(")).to.throw("The input contains an invalid sequence.");
                 expect(ParseExpression.bind(ParseExpression, "(1))")).to.throw("The input contains an invalid sequence.");
+            });
+        });
+    });
+
+    describe("XMLParser", () => {
+        context("with a valid document", () => {
+            it("should return the correct object", () => {
+                expect(ParseXML(`
+                <movie id="1">
+                    <title>Example Movie</title>
+                    <released>
+                        <year>1999</year>
+                        <month>10</month>
+                        <day>18</day>
+                    </released>
+                    <company>Example Company
+                    with newlines</company>
+                </movie>
+                `)).to.eql([
+                    {name: "movie", attributes: {"id": "1"}, content: [
+                            {name: "title", attributes: {}, content: "Example Movie"},
+                            {name: "released", attributes: {}, content: [
+                                    {name: "year", attributes: {}, content: "1999"},
+                                    {name: "month", attributes: {}, content: "10"},
+                                    {name: "day", attributes: {}, content: "18"}
+                                ]
+                            },
+                            {name: "company", attributes: {}, content: "Example Company\n                    with newlines"}
+                        ]
+                    }
+                ]);
             });
         });
     });

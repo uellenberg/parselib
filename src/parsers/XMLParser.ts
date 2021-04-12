@@ -46,7 +46,10 @@ const parseXMLEntity = (token: Token) : XMLEntity => {
     return entity;
 }
 
-const XMLTokenizer = new TokenizerChain(new RegexTokenizer(/<(".*?"|.*?)*?>/g)).token(new CustomTokenizer(input => [{value: input.substring(1, input.length-1), isToken: true}]));
+const XMLTokenizer = new TokenizerChain(new RegexTokenizer(/<(".*?"|.*?)*?>/g)).token(new CustomTokenizer(input => [{value: input.substring(1, input.length-1), isToken: true}])).text(new CustomTokenizer(input => {
+    if(!input || !input.trim().replace(/\n+/g, "")) return [];
+    return [{value: input, isToken: false}];
+}));
 const XMLAttributeTokenizer = new TokenizerChain(new RegexTokenizer(/ .*?=".*?"| .*?='.*?'/g)).token(new CustomTokenizer(input => {
     const split = input.split("=");
 
@@ -54,6 +57,6 @@ const XMLAttributeTokenizer = new TokenizerChain(new RegexTokenizer(/ .*?=".*?"|
         {value: null, isToken: true, data: [split.shift(), split.join("=")]}
     ];
 })).text(new CustomTokenizer(input => {
-    if(!input || !input.trim()) return [];
+    if(!input || !input.trim().replace(/\n+/g, "")) return [];
     throw new Error("An attribute must have a value." + input);
 }));
