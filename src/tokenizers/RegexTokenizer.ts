@@ -3,7 +3,7 @@ import {TokenCallback, Token, Tokenizer} from "../types/tokenizer";
 /**
  * A tokenizer that can search for tokens using a regular expression.
  *
- * For example, with the input "&lt;p&gt;test&lt;/p&gt;" and a regular expression "/<.*?>/", then the output will be ["&lt;p&gt;", "test", "&lt;/p&gt;"].
+ * For example, with the input `<p>test</p>` and a regular expression `/<.*?>/`, then the output will be `["<p>", "test", "</p>"]`.
  */
 export class RegexTokenizer implements Tokenizer {
     private readonly regex: RegExp;
