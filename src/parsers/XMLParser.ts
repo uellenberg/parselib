@@ -94,5 +94,5 @@ const XMLAttributeTokenizer = new TokenizerChain(new RegexTokenizer(/ .*?=".*?"|
     ];
 })).text(new CustomTokenizer(input => {
     if(!input || !input.trim().replace(/\n+/g, "")) return [];
-    throw new Error("An attribute must have a value." + input);
+    throw new Error("An attribute must have a value.");
 }));

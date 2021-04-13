@@ -183,9 +183,9 @@ describe("Parsers", () => {
             });
         });
 
-        context("with a document that has an invalid property", () => {
+        context("with a document that has an invalid attribute", () => {
             it("should throw an error", () => {
-                expect(ParseXML.bind(ParseXML, "<test invaldProperty>")).to.throw("The input contains an invalid sequence.");
+                expect(ParseXML.bind(ParseXML, "<test invaldProperty></test>")).to.throw("An attribute must have a value.");
             });
         });
 
