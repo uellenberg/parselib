@@ -182,5 +182,38 @@ describe("Parsers", () => {
                 ]});
             });
         });
+
+        context("with a document that has an invalid property", () => {
+            it("should throw an error", () => {
+                expect(ParseXML.bind(ParseXML, "<test invaldProperty>")).to.throw("The input contains an invalid sequence.");
+            });
+        });
+
+        context("with incorrectly closed tags", () => {
+            it("should throw an error", () => {
+                expect(ParseXML.bind(ParseXML, "<unescaped>")).to.throw("The input contains an invalid sequence.");
+                expect(ParseXML.bind(ParseXML, "<unescaped></unescaped></unescaped>")).to.throw("The input contains an invalid sequence.");
+                expect(ParseXML.bind(ParseXML, "</unescaped>")).to.throw("The input contains an invalid sequence.");
+                expect(ParseXML.bind(ParseXML, "<unescaped></differenttag>")).to.throw("An XML tag must be closed by a tag of the same name.");
+            });
+        });
+
+        context("with two attributes of the same name", () => {
+            it("should throw an error", () => {
+                expect(ParseXML.bind(ParseXML, "<incorrect attribute='something' attribute='something else'></incorrect>")).to.throw("An XML attribute cannot be defined twice.");
+            });
+        });
+
+        context("with root-level text", () => {
+            it("should throw an error", () => {
+                expect(ParseXML.bind(ParseXML, "text")).to.throw("Text can only go inside of XML Entities.");
+            });
+        });
+
+        context("with text alongside entities", () => {
+            it("should throw an error", () => {
+                expect(ParseXML.bind(ParseXML, "<test><tag></tag>text</test>")).to.throw("Strings cannot go alongside other XML Entities.");
+            });
+        });
     });
 });

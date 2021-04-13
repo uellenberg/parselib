@@ -29,12 +29,24 @@ export const ParseXML = (input: string) : XMLDocument => {
         else entity.content = tokens1;
 
         return entity;
+    }, entities => {
+        let hasText = false;
+        let hasEntities = false;
+
+        entities.forEach(entity => {
+            if(typeof(entity) !== "object") hasText = true;
+            else hasEntities = true;
+        });
+
+        if(hasText && hasEntities) throw new Error("Strings cannot go alongside other XML Entities.");
+
+        return entities;
     });
 
     let document: XMLDocument = {attributes: {}, content: []};
 
     entities = entities.filter(entity => {
-        if(typeof(entity) !== "object") return false;
+        if(typeof(entity) !== "object") throw new Error("Text can only go inside of XML Entities.");
         if(entity.name !== "?xml") return true;
 
         for (let attributesKey of Object.keys(entity.attributes)) {
