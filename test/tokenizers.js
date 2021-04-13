@@ -1,6 +1,5 @@
 const {RegexTokenizer, TokenizerChain, CustomTokenizer, ParseExpression, ParseXML} = require("../dist");
 const {expect} = require("chai");
-const fs = require("fs");
 
 describe("TokenizerChain", () => {
     context("with HTML test", () => {
