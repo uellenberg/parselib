@@ -1,11 +1,15 @@
 import {TokenizerChain} from "../tokenizerChain";
 import {CustomTokenizer, RecursiveMap, RegexTokenizer, Token} from "..";
-import {XMLEntity} from "../types/parser/XML";
+import {XMLDocument, XMLEntity} from "../types/parser/XML";
 
-export const ParseXML = (input: string) => {
+/**
+ * A function to parse an XML document into an object. This only provides parsing capabilities, not querying.
+ * @param input {string} - is the XML document in string format.
+ */
+export const ParseXML = (input: string) : XMLDocument => {
     const tokens = XMLTokenizer.run(input);
 
-    return RecursiveMap<XMLEntity>(tokens, token => token.isToken && token.value[0] !== "/" && token.value[token.value.length-1] !== "/", token => token.isToken && token.value[0] === "/", token => {
+    let entities = RecursiveMap<XMLEntity>(tokens, token => token.isToken && token.value[0] !== "/" && token.value[token.value.length-1] !== "/" && !(token.value[0] === "?" && token.value[token.value.length-1] === "?"), token => token.isToken && token.value[0] === "/", token => {
         if(token.isToken) {
             const token1 = token;
             token1.value = token1.value.substring(0, token1.value.length-1);
@@ -26,6 +30,22 @@ export const ParseXML = (input: string) => {
 
         return entity;
     });
+
+    let document: XMLDocument = {attributes: {}, content: []};
+
+    entities = entities.filter(entity => {
+        if(typeof(entity) !== "object") return false;
+        if(entity.name !== "?xml") return true;
+
+        for (let attributesKey of Object.keys(entity.attributes)) {
+            document.attributes[attributesKey] = entity.attributes[attributesKey];
+        }
+
+        return false;
+    });
+
+    document.content = entities;
+    return document;
 }
 
 const parseXMLEntity = (token: Token) : XMLEntity => {
@@ -53,6 +73,7 @@ const XMLTokenizer = new TokenizerChain(new RegexTokenizer(/<(".*?"|.*?)*?>/g)).
     if(!input || !input.trim().replace(/\n+/g, "")) return [];
     return [{value: input, isToken: false}];
 }));
+
 const XMLAttributeTokenizer = new TokenizerChain(new RegexTokenizer(/ .*?=".*?"| .*?='.*?'/g)).token(new CustomTokenizer(input => {
     const split = input.split("=");
 

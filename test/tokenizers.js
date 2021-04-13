@@ -154,6 +154,7 @@ describe("Parsers", () => {
         context("with a valid document", () => {
             it("should return the correct object", () => {
                 expect(ParseXML(`
+                 <?xml version="1.0" encoding="UTF-8"?>
                 <movie id="1">
                     <title>Example Movie</title>
                     <released>
@@ -165,7 +166,7 @@ describe("Parsers", () => {
                     with newlines</company>
                     <selfclosing type="tag" />
                 </movie>
-                `)).to.eql([
+                `)).to.eql({attributes: {version: "1.0", encoding: "UTF-8"}, content: [
                     {name: "movie", attributes: {id: "1"}, content: [
                             {name: "title", attributes: {}, content: "Example Movie"},
                             {name: "released", attributes: {}, content: [
@@ -178,7 +179,7 @@ describe("Parsers", () => {
                             {name: "selfclosing", attributes: {type: "tag"}, content: null}
                         ]
                     }
-                ]);
+                ]});
             });
         });
     });
