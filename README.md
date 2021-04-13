@@ -1,5 +1,5 @@
 # ParseLib
-[![CodeFactor](https://www.codefactor.io/repository/github/uellenberg/parselib/badge?style=flat-square)] [![codecov](https://codecov.io/gh/uellenberg/parselib/branch/master/graph/badge.svg?token=JZW2L239AP)](https://codecov.io/gh/uellenberg/parselib)
+![CodeFactor](https://www.codefactor.io/repository/github/uellenberg/parselib/badge?style=flat-square) [![codecov](https://codecov.io/gh/uellenberg/parselib/branch/master/graph/badge.svg?token=JZW2L239AP)](https://codecov.io/gh/uellenberg/parselib)
 ## Notice
 ParseLib is currently WIP and breaking changes are to be expected. Currently, it only supports parsing mathematical expressions and XML documents. It also does not yet have large file support.
 
